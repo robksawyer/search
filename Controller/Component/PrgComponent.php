@@ -252,30 +252,32 @@ class PrgComponent extends Component {
 					$params = array_merge($this->controller->request->params['pass'], $params);
 				}
 
-				$searchParams = $this->controller->data[$modelName];
-				$searchParams = $this->exclude($searchParams, array());
-				if ($filterEmpty) {
-					$searchParams = Set::filter($searchParams);
-				}
+				if(isset($this->controller->data[$modelName])){
+					$searchParams = $this->controller->data[$modelName];
+					$searchParams = $this->exclude($searchParams, array());
 
-				$this->serializeParams($searchParams);
-
-				if ($paramType == 'named') {
-					$params = array_merge($params, $searchParams);
-					$this->connectNamed($params, array());
-				} else {
-					$this->connectNamed($params, array());
-					$params['?'] = array_merge($this->controller->request->query, $searchParams);
-				}
-
-				$params['action'] = $action;
-
-				foreach ($allowedParams as $key) {
-					if (isset($this->controller->request->params[$key])) {
-						$params[$key] = $this->controller->request->params[$key];
+					if ($filterEmpty) {
+						$searchParams = Set::filter($searchParams);
 					}
+					$this->serializeParams($searchParams);
+
+					if ($paramType == 'named') {
+						$params = array_merge($params, $searchParams);
+						$this->connectNamed($params, array());
+					} else {
+						$this->connectNamed($params, array());
+						$params['?'] = array_merge($this->controller->request->query, $searchParams);
+					}
+
+					$params['action'] = $action;
+
+					foreach ($allowedParams as $key) {
+						if (isset($this->controller->request->params[$key])) {
+							$params[$key] = $this->controller->request->params[$key];
+						}
+					}
+					$this->controller->redirect($params);
 				}
-				$this->controller->redirect($params);
 			} else {
 				$this->controller->Session->setFlash(__d('search', 'Please correct the errors below.'));
 			}
