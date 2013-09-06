@@ -405,7 +405,7 @@ class PrgComponent extends Component {
 		} elseif (($paramType === 'named' && !empty($this->controller->passedArgs)) ||
 				($paramType === 'querystring' && !empty($this->controller->request->query))
 			) {
-
+			
 			$this->connectNamed($this->controller->passedArgs, array());
 			$this->presetForm(array('model' => $formName, 'paramType' => $paramType));
 		}
