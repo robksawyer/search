@@ -178,7 +178,7 @@ class PrgComponent extends Component {
 			if ($paramType === 'named' && ($this->encode || !empty($field['encode']))) {
 				// Its important to set it also back to the controllers passed args!
 				$fieldContent = str_replace(array('-', '_'), array('/', '='), $args[$field['field']]);
-				$args[$field['field']] = base64_decode($fieldContent);
+				$args[$field['field']] = base64_decode(strval($fieldContent));
 			}
 
 			if ($field['type'] === 'lookup') {
@@ -343,7 +343,7 @@ class PrgComponent extends Component {
 			$action = $this->controller->action;
 		}
 
-		if (!empty($this->controller->request->data)) {
+		if (!empty($this->controller->request->data) && isset($this->controller->request->data[$modelName])) {
 			$this->controller->{$modelName}->set($this->controller->request->data);
 			$valid = true;
 			if ($modelMethod !== false) {
@@ -405,6 +405,8 @@ class PrgComponent extends Component {
 		} elseif (($paramType === 'named' && !empty($this->controller->passedArgs)) ||
 				($paramType === 'querystring' && !empty($this->controller->request->query))
 			) {
+
+			debug($this->controller->passedArgs);
 			$this->connectNamed($this->controller->passedArgs, array());
 			$this->presetForm(array('model' => $formName, 'paramType' => $paramType));
 		}
