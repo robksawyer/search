@@ -406,7 +406,6 @@ class PrgComponent extends Component {
 				($paramType === 'querystring' && !empty($this->controller->request->query))
 			) {
 
-			debug($this->controller->passedArgs);
 			$this->connectNamed($this->controller->passedArgs, array());
 			$this->presetForm(array('model' => $formName, 'paramType' => $paramType));
 		}
